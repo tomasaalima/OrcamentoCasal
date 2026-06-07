@@ -139,6 +139,25 @@ h3 {
   gap: 10px;
 }
 
+.panel-title-actions {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.panel-title-actions h2 {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 4px;
+}
+
+.sort-field {
+  width: 220px;
+}
+
 .field.wide,
 .wide {
   grid-column: 1 / -1;
@@ -217,6 +236,14 @@ input[type="file"] {
   min-height: 34px;
   padding-inline: 10px;
   font-size: 0.84rem;
+}
+
+.form-submit {
+  width: 100%;
+}
+
+.form-actions .form-submit {
+  flex: 1 1 100%;
 }
 
 .button-icon {
@@ -486,6 +513,26 @@ input[type="file"] {
   background: var(--surface-strong);
 }
 
+.person-row {
+  align-items: start;
+  padding: 10px 12px;
+}
+
+.person-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.person-heading strong {
+  min-width: 0;
+}
+
+.person-edit {
+  margin-left: 2px;
+}
+
 .person-row strong,
 .expense-row strong,
 .income-row strong {
@@ -518,24 +565,23 @@ input[type="file"] {
 
 .person-stats {
   display: grid;
-  gap: 5px;
-  margin-top: 8px;
+  gap: 3px;
+  margin-top: 4px;
 }
 
 .person-stat {
-  display: flex;
+  display: block;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
   color: var(--muted);
   font-size: 0.82rem;
+  white-space: nowrap;
 }
 
 .person-stat strong {
   color: var(--text);
   font-size: 0.86rem;
   font-variant-numeric: tabular-nums;
-  text-align: right;
+  text-align: left;
   white-space: nowrap;
 }
 

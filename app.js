@@ -770,8 +770,18 @@ function renderPeople() {
     row.className = "person-row";
 
     const info = document.createElement("div");
+    const heading = document.createElement("div");
+    heading.className = "person-heading";
+
     const name = document.createElement("strong");
     name.textContent = person.name;
+
+    const edit = makeIconAction(`Editar ${person.name}`, "pencil");
+    edit.classList.add("person-edit");
+    edit.addEventListener("click", () => openPersonDialog(person.id));
+
+    heading.append(name, edit);
+
     const spent = sum(getPeriodExpenses().filter((expense) => expense.personId === person.id).map((expense) => expense.amount));
     const income = getPeriodIncomeTotal(person.id);
     const stats = document.createElement("div");
@@ -784,26 +794,23 @@ function renderPeople() {
       const line = document.createElement("div");
       line.className = "person-stat";
       const labelEl = document.createElement("span");
-      labelEl.textContent = label;
+      labelEl.textContent = `${label}: `;
       const valueEl = document.createElement("strong");
       valueEl.textContent = value;
       line.append(labelEl, valueEl);
       stats.append(line);
     });
 
-    info.append(name, stats);
+    info.append(heading, stats);
 
     const actions = document.createElement("div");
     actions.className = "person-actions";
-
-    const edit = makeIconAction(`Editar ${person.name}`, "pencil");
-    edit.addEventListener("click", () => openPersonDialog(person.id));
 
     const remove = makeIconAction(`Excluir ${person.name}`, "trash", "danger");
     remove.disabled = appState.people.length <= 1;
     remove.addEventListener("click", () => deletePerson(person.id));
 
-    actions.append(edit, remove);
+    actions.append(remove);
     row.append(info, actions);
     elements.peopleList.append(row);
   });

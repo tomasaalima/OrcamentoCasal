@@ -105,7 +105,7 @@
                     <input id="expenseDescription" name="description" type="text" maxlength="80" placeholder="Ex.: sandália" />
                   </label>
 
-                  <button class="button primary wide" type="submit" data-icon="plus">Adicionar gasto</button>
+                  <button class="button primary form-submit wide" type="submit" data-icon="plus">Adicionar gasto</button>
                 </form>
               </div>
 
@@ -156,7 +156,7 @@
                   </label>
 
                   <div class="form-actions wide">
-                    <button class="button primary" id="incomeSubmitButton" type="submit" data-icon="plus">Adicionar entrada</button>
+                    <button class="button primary form-submit" id="incomeSubmitButton" type="submit" data-icon="plus">Adicionar entrada</button>
                     <button class="button ghost hidden" id="incomeCancelEditButton" type="button" data-icon="x">Cancelar edição</button>
                   </div>
                 </form>
@@ -164,10 +164,10 @@
             </section>
 
             <section class="panel">
-              <div class="panel-heading">
-                <h2>Acompanhar categorias</h2>
-                <div class="panel-actions">
-                  <label class="field compact">
+              <div class="panel-heading category-heading">
+                <div class="panel-title-actions">
+                  <h2>Acompanhar categorias</h2>
+                  <label class="field sort-field">
                     <span>Ordenar</span>
                     <select id="categorySort" aria-label="Ordenar categorias">
                       <option value="name">Nome</option>
@@ -175,8 +175,8 @@
                       <option value="createdAt">Data de criação</option>
                     </select>
                   </label>
-                  <button class="button ghost" id="newCategoryButton" type="button" data-icon="plus">Nova categoria</button>
                 </div>
+                <button class="button ghost" id="newCategoryButton" type="button" data-icon="plus">Nova categoria</button>
               </div>
 
               <div id="categoryBoard" class="category-board"></div>

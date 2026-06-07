@@ -1,4 +1,4 @@
-const CACHE_NAME = "orcamento-do-casal-v4";
+const CACHE_NAME = "orcamento-do-casal-v7";
 const ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.json", "./icons/icon.svg"];
 
 self.addEventListener("install", (event) => {
