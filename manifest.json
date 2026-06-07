@@ -1,0 +1,17 @@
+{
+  "name": "Orçamento do casal",
+  "short_name": "Orçamento",
+  "description": "Controle local de orçamento familiar por período, categoria e pessoa.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f4f6f5",
+  "theme_color": "#f4f6f5",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

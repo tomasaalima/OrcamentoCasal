@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f6f5" />
+    <title>Orçamento do casal</title>
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Controle local</p>
+          <h1>Orçamento do casal</h1>
+        </div>
+
+        <div class="topbar-actions">
+          <label class="field compact">
+            <span>Período</span>
+            <select id="periodSelect" aria-label="Selecionar período"></select>
+          </label>
+          <button class="button ghost" id="newPeriodButton" type="button" data-icon="plus">Novo período</button>
+          <button class="button ghost" id="editPeriodButton" type="button" data-icon="pencil">Editar período</button>
+          <button class="button primary" id="backupButton" type="button" data-icon="download">Exportar</button>
+          <label class="button file-button" for="importFile" data-icon="upload">Importar</label>
+          <input id="importFile" type="file" accept="application/json" />
+        </div>
+      </header>
+
+      <main>
+        <section class="summary-grid" aria-label="Resumo do orçamento">
+          <article class="metric">
+            <span>Planejado</span>
+            <strong id="metricBudget">R$ 0,00</strong>
+          </article>
+          <article class="metric">
+            <span>Entradas</span>
+            <strong id="metricIncome">R$ 0,00</strong>
+          </article>
+          <article class="metric">
+            <span>Gasto</span>
+            <strong id="metricSpent">R$ 0,00</strong>
+          </article>
+          <article class="metric">
+            <span>Saldo</span>
+            <strong id="metricRemaining">R$ 0,00</strong>
+          </article>
+          <article class="metric">
+            <span>Uso</span>
+            <strong id="metricUsage">0%</strong>
+          </article>
+          <article class="metric">
+            <span>Sobra prevista</span>
+            <strong id="metricNet">R$ 0,00</strong>
+          </article>
+        </section>
+
+        <section class="workspace">
+          <div class="left-stack">
+            <section class="panel entry-panel">
+              <div class="panel-heading">
+                <h2>Lançar</h2>
+                <div class="segmented" role="tablist" aria-label="Tipo de lançamento">
+                  <button id="expenseFormTab" class="active" type="button" role="tab" aria-selected="true" data-icon="receipt">Gasto</button>
+                  <button id="incomeFormTab" type="button" role="tab" aria-selected="false" data-icon="wallet">Entrada</button>
+                </div>
+              </div>
+
+              <div id="expenseFormPanel" class="tab-panel">
+                <form id="expenseForm" class="expense-form">
+                  <label class="field">
+                    <span>Data</span>
+                    <input id="expenseDate" name="date" type="date" required />
+                  </label>
+
+                  <label class="field">
+                    <span>Pessoa</span>
+                    <select id="expensePerson" name="personId" required></select>
+                  </label>
+
+                  <label class="field">
+                    <span>Categoria</span>
+                    <select id="expenseCategory" name="categoryId" required></select>
+                  </label>
+
+                  <label class="field">
+                    <span>Valor</span>
+                    <input
+                      id="expenseAmount"
+                      name="amount"
+                      type="number"
+                      min="0.01"
+                      step="0.01"
+                      inputmode="decimal"
+                      placeholder="0,00"
+                      required
+                    />
+                  </label>
+
+                  <label class="field wide">
+                    <span>Descrição</span>
+                    <input id="expenseDescription" name="description" type="text" maxlength="80" placeholder="Ex.: sandália" />
+                  </label>
+
+                  <button class="button primary wide" type="submit" data-icon="plus">Adicionar gasto</button>
+                </form>
+              </div>
+
+              <div id="incomeFormPanel" class="tab-panel hidden">
+                <form id="incomeForm" class="income-form">
+                  <input id="incomeId" name="id" type="hidden" />
+
+                  <label class="field">
+                    <span>Data inicial</span>
+                    <input id="incomeDate" name="date" type="date" required />
+                  </label>
+
+                  <label class="field">
+                    <span>Pessoa</span>
+                    <select id="incomePerson" name="personId" required></select>
+                  </label>
+
+                  <label class="field">
+                    <span>Recorrência</span>
+                    <select id="incomeFrequency" name="frequency" required>
+                      <option value="monthly">Mensal</option>
+                      <option value="once">Única</option>
+                    </select>
+                  </label>
+
+                  <label class="field">
+                    <span>Receber até</span>
+                    <input id="incomeEndDate" name="endDate" type="date" />
+                  </label>
+
+                  <label class="field">
+                    <span>Valor</span>
+                    <input
+                      id="incomeAmount"
+                      name="amount"
+                      type="number"
+                      min="0.01"
+                      step="0.01"
+                      inputmode="decimal"
+                      placeholder="0,00"
+                      required
+                    />
+                  </label>
+
+                  <label class="field wide">
+                    <span>Descrição</span>
+                    <input id="incomeDescription" name="description" type="text" maxlength="80" placeholder="Ex.: salário, bolsa, férias" required />
+                  </label>
+
+                  <div class="form-actions wide">
+                    <button class="button primary" id="incomeSubmitButton" type="submit" data-icon="plus">Adicionar entrada</button>
+                    <button class="button ghost hidden" id="incomeCancelEditButton" type="button" data-icon="x">Cancelar edição</button>
+                  </div>
+                </form>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>Acompanhar categorias</h2>
+                <div class="panel-actions">
+                  <label class="field compact">
+                    <span>Ordenar</span>
+                    <select id="categorySort" aria-label="Ordenar categorias">
+                      <option value="name">Nome</option>
+                      <option value="usage">Percentual usado</option>
+                      <option value="createdAt">Data de criação</option>
+                    </select>
+                  </label>
+                  <button class="button ghost" id="newCategoryButton" type="button" data-icon="plus">Nova categoria</button>
+                </div>
+              </div>
+
+              <div id="categoryBoard" class="category-board"></div>
+              <div id="categoryPagination" class="pagination"></div>
+            </section>
+          </div>
+
+          <aside class="right-stack">
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>Pessoas</h2>
+                <button class="button ghost" id="newPersonButton" type="button" data-icon="plus">Adicionar</button>
+              </div>
+              <div id="peopleList" class="people-list"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>Histórico</h2>
+                <div class="segmented" role="tablist" aria-label="Histórico">
+                  <button id="expensesHistoryTab" class="active" type="button" role="tab" aria-selected="true" data-icon="receipt">Gastos</button>
+                  <button id="incomesHistoryTab" type="button" role="tab" aria-selected="false" data-icon="wallet">Entradas</button>
+                </div>
+              </div>
+
+              <div id="expensesHistoryPanel" class="tab-panel">
+                <div class="segmented person-filter" role="group" aria-label="Filtro de pessoa">
+                  <button id="allPeopleFilter" class="active" type="button">Todos</button>
+                </div>
+                <div id="expensesList" class="expenses-list"></div>
+                <div id="expensesPagination" class="pagination"></div>
+              </div>
+
+              <div id="incomesHistoryPanel" class="tab-panel hidden">
+                <div id="incomesList" class="income-list"></div>
+              </div>
+            </section>
+          </aside>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="periodDialog">
+      <form id="periodForm" method="dialog" class="dialog-card">
+        <div class="dialog-heading">
+          <h2 id="periodDialogTitle">Novo período</h2>
+          <button class="icon-button" value="cancel" type="submit" aria-label="Fechar">×</button>
+        </div>
+
+        <input id="periodId" name="id" type="hidden" />
+
+        <label class="field">
+          <span>Nome</span>
+          <input id="periodName" name="name" type="text" maxlength="50" required />
+        </label>
+
+        <div class="form-grid two">
+          <label class="field">
+            <span>Início</span>
+            <input id="periodStart" name="startDate" type="date" required />
+          </label>
+
+          <label class="field">
+            <span>Fim</span>
+            <input id="periodEnd" name="endDate" type="date" required />
+          </label>
+        </div>
+
+        <div class="dialog-actions">
+          <button class="button ghost" value="cancel" type="submit">Cancelar</button>
+          <button class="button primary" id="savePeriodButton" value="default" type="submit">Salvar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="categoryDialog">
+      <form id="categoryForm" method="dialog" class="dialog-card">
+        <div class="dialog-heading">
+          <h2 id="categoryDialogTitle">Categoria</h2>
+          <button class="icon-button" value="cancel" type="submit" aria-label="Fechar">×</button>
+        </div>
+
+        <input id="categoryId" name="id" type="hidden" />
+
+        <label class="field">
+          <span>Nome</span>
+          <input id="categoryName" name="name" type="text" maxlength="40" required />
+        </label>
+
+        <label class="field">
+          <span>Orçamento total</span>
+          <input id="categoryBudget" name="budget" type="number" min="0" step="0.01" inputmode="decimal" required />
+        </label>
+
+        <label class="field">
+          <span>Cor</span>
+          <input id="categoryColor" name="color" type="color" />
+        </label>
+
+        <div>
+          <div class="allocation-heading">
+            <span>Divisão por pessoa</span>
+            <button class="button ghost small" id="splitEvenlyButton" type="button">Dividir igual</button>
+          </div>
+          <div id="allocationFields" class="allocation-fields"></div>
+        </div>
+
+        <div class="dialog-actions">
+          <button class="button ghost" value="cancel" type="submit">Cancelar</button>
+          <button class="button primary" id="saveCategoryButton" value="default" type="submit">Salvar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="personDialog">
+      <form id="personForm" method="dialog" class="dialog-card">
+        <div class="dialog-heading">
+          <h2>Pessoa</h2>
+          <button class="icon-button" value="cancel" type="submit" aria-label="Fechar">×</button>
+        </div>
+
+        <input id="personId" name="id" type="hidden" />
+
+        <label class="field">
+          <span>Nome</span>
+          <input id="personName" name="name" type="text" maxlength="35" required />
+        </label>
+
+        <div class="dialog-actions">
+          <button class="button ghost" value="cancel" type="submit">Cancelar</button>
+          <button class="button primary" value="default" type="submit">Salvar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
